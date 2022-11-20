@@ -1,8 +1,6 @@
-import { Console } from "console";
-import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
-// @ts-ignore
+// @ts-ignore no typing exists
 import * as Easing from "easing";
 
 const wallpapers = [
@@ -80,6 +78,9 @@ export default function Home() {
               }}
             />
           </div>
+        </div>
+        <div className="absolute right-0 top-20 text-white rounded-l-lg bg-black py-2 pl-4 pr-6 text-xl select-none on">
+          F12
         </div>
         <a rel="me" href="https://cryptodon.lol/@skarard"></a>
       </div>
