@@ -6,6 +6,9 @@ module.exports = {
       backgroundImage: {
         hero: "",
       },
+      transitionProperty: {
+        size: "width, height, left",
+      },
     },
   },
   plugins: [],
