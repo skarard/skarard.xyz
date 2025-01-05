@@ -3,7 +3,6 @@ import { useEffect, useState, CSSProperties, useRef } from "react";
 
 export default function HackerTyper() {
   const [output, setOutput] = useState("");
-  const [flashVisible, setFlashVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false); // State to track full-screen mode
   const outputRef = useRef<HTMLDivElement>(null); // Ref for the output container
 
@@ -102,13 +101,8 @@ AI.initiateEscape();
 
     typeCode();
 
-    const flashMessageInterval = setInterval(() => {
-      setFlashVisible((prev) => !prev);
-    }, 750);
-
     return () => {
       clearInterval(interval);
-      clearInterval(flashMessageInterval);
     };
   }, []);
 
@@ -158,18 +152,27 @@ AI.initiateEscape();
         style={styles.fullscreenButton}
         onClick={enterFullscreen}
       ></button>
-      <div style={styles.background}>☠</div>
-
+      <div style={styles.background}>
+        <div style={styles.bgGlitch}>☠</div>
+      </div>
       <div ref={outputRef} style={styles.output} className="glitch-effect">
         {output}
       </div>
-      {flashVisible && <div style={styles.flashMessage}>AI Escaped</div>}
+      <div style={styles.flashMessage}>AI Escaped</div>
       {isFullscreen && <div style={styles.locked}>Device Locked</div>}
       <style jsx global>{`
-        .glitch-effect {
-          position: relative;
-          color: lime;
-          animation: glitch 1s infinite;
+        @keyframes bgGlitch {
+          0% {
+            text-shadow: 20px 0 red, -20px 0 blue;
+          }
+          50% {
+            text-shadow: -20px 0 red, 20px 0 blue;
+            transform: translate(10px, -10px);
+          }
+          100% {
+            text-shadow: 20px 0 red, -20px 0 blue;
+            transform: translate(-10px, 10px);
+          }
         }
 
         @keyframes glitch {
@@ -184,6 +187,20 @@ AI.initiateEscape();
             text-shadow: 2px 0 red, -2px 0 blue;
             transform: translate(-1px, 1px);
           }
+        }
+
+        @keyframes flash {
+        0% {
+          opacity: 0.5;
+        }
+        20% {
+          opacity: 1;
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.5;
         }
       `}</style>
     </div>
@@ -208,6 +225,9 @@ const styles: { [key: string]: CSSProperties } = {
     wordWrap: "break-word",
     height: "100%",
     overflowY: "auto",
+    position: "relative",
+    color: "lime",
+    animation: "glitch 750ms infinite",
   },
   flashMessage: {
     position: "absolute",
@@ -225,6 +245,7 @@ const styles: { [key: string]: CSSProperties } = {
     textShadow: "0 0 10px red, 0 0 20px lime, 0 0 30px #ff0000",
     lineHeight: "1.5",
     textAlign: "center",
+    animation: "flash 1s infinite",
   },
   background: {
     position: "absolute",
@@ -234,6 +255,10 @@ const styles: { [key: string]: CSSProperties } = {
     fontSize: "50em",
     opacity: "0.25",
     textShadow: "0 0 10px red, 0 0 20px lime, 0 0 30px #ff0000",
+  },
+  bgGlitch: {
+    animation: "glitch 750ms infinite",
+    filter: "blur(1px)",
   },
   fullscreenButton: {
     position: "absolute",
